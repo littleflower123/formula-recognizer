@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formula OCR</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/katex.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/katex.min.js"></script>
+</head>
+<body>
+    <h1>Upload an Image with a Formula</h1>
+    <form id="uploadForm">
+        <input type="file" id="imageInput" accept="image/*" />
+        <button type="submit">Upload</button>
+    </form>
+
+    <h2>LaTeX代码（可编辑）</h2>
+    <textarea id="latexInput" rows="4" style="width: 100%;"></textarea>
+
+    <button onclick="copyLatex()">复制LaTeX</button>
+
+    <h2>公式预览</h2>
+    <div id="preview" style="font-size: 24px; margin-top: 10px;"></div>
+
+    <script>
+        document.getElementById('uploadForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const formData = new FormData();
+            formData.append('image', document.getElementById('imageInput').files[0]);
+
+            fetch('http://localhost:5000/upload', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log("LaTeX:", data.latex);
+
+                // 1️⃣ 显示在输入框
+                const input = document.getElementById('latexInput');
+                input.value = data.latex;
+
+                // 2️⃣ 渲染公式
+                renderLatex(data.latex);
+            })
+            .catch(error => console.error('Error:', error));
+        });
+
+                function renderLatex(latex) {
+            const preview = document.getElementById('preview');
+            preview.innerHTML = "";
+
+            try {
+                katex.render(latex, preview);
+            } catch (e) {
+                preview.innerText = "公式错误：" + e.message;
+            }
+        }
+
+        // 实时监听输入变化（🔥重点）
+        document.getElementById('latexInput').addEventListener('input', function() {
+            renderLatex(this.value);
+        });
+
+        // 复制功能
+        function copyLatex() {
+            const input = document.getElementById('latexInput');
+            input.select();
+            document.execCommand("copy");
+            alert("已复制！");
+        }
+    </script>
+    <style>
+        textarea {
+            font-family: monospace;
+            font-size: 16px;
+            padding: 10px;
+        }
+
+        #preview {
+            border: 1px solid #ccc;
+            padding: 15px;
+            min-height: 50px;
+            background: #f9f9f9;
+        }
+    </style>
+</body>
+</html>
+
