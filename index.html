@@ -48,8 +48,12 @@
                 method: 'POST',
                 body: formData
             })
-            .then(response => response.json())
+            .then(response => {
+                console.log("收到响应", response);  // 👈 加这里
+                return response.json();
+            })
             .then(data => {
+                console.log("返回数据", data); 
                 if (data.error) {
                     alert("识别失败：" + data.error);
                     return;
