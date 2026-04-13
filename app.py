@@ -27,6 +27,8 @@ def upload_image():
         # 出错时返回错误信息（方便调试）
         return jsonify({'error': str(e)})
 
+import os
+
 if __name__ == '__main__':
-    port = int(os.environ.get("PORT", 5000))
+    port = int(os.environ.get("PORT", 10000))  # 关键！
     app.run(host='0.0.0.0', port=port)
