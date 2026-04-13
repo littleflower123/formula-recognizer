@@ -31,7 +31,9 @@
 
         document.getElementById('uploadForm').addEventListener('submit', function(event) {
             console.log("点击了上传");
+            console.log("开始发送请求"); 
             event.preventDefault();
+
 
             const fileInput = document.getElementById('imageInput');
             if (!fileInput.files.length) {
