@@ -30,6 +30,7 @@
         const API_URL = "https://formula-recognizer.onrender.com/upload"; // 🔥关键修改
 
         document.getElementById('uploadForm').addEventListener('submit', function(event) {
+            console.log("点击了上传");
             event.preventDefault();
 
             const fileInput = document.getElementById('imageInput');
