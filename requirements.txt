@@ -1,0 +1,6 @@
+flask
+flask-cors
+pix2tex
+pillow
+torch
+torchvision
